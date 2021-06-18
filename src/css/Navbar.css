@@ -1,0 +1,91 @@
+.navbar{
+  width: 100%;
+  height: 75px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  box-shadow: 0px 5px 10px 5px #88888888;
+  display:flex;
+  align-content: center;
+  justify-content: flex-start;
+}
+
+.navbar-link{
+  font-size: 2rem;
+  margin: 1rem;
+  align-self: center;
+  -webkit-transition: .2s linear;
+  -o-transition: .2s linear;
+  transition: .2s linear;
+}
+
+.navbar-link a{
+  text-decoration: none !important;
+  color:black;
+}
+
+.navbar-link:hover{
+  transform: translateY(-5px);
+}
+
+.navbar-icon{
+  width: 35px !important;
+  height: 35px !important;
+}
+
+.burger{
+  display:none;
+}
+
+.navbar-dropdown{
+  display:none;
+  background-color: #f0f0f0;
+  z-index: 2;
+}
+
+.navbar-dropdown-link{
+  display: none;
+  font-size: 1.5rem;
+  margin: .5rem;
+}
+
+.navbar-dropdown-link a{
+  text-decoration: none !important;
+  color:black;
+}
+
+@media only screen and (max-width:600px){
+  .burger{
+    display:block;
+    align-self: center;
+    margin: 1.5rem;
+    height: 35px !important;
+    width: 35px !important;
+  }
+
+  .navbar-link{
+    display: none;
+  }
+
+  .navbar-icon{
+    width: 25px !important;
+    height: 25px !important;
+  }
+
+  .navbar-dropdown{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    position:absolute;
+    top:75px; /*height of the navbar*/
+    left:0px;
+    transition: .5s linear;
+  }
+
+  .navbar-dropdown-link{
+    display: block;
+    width: 100%;
+    margin: 1.5rem;
+  }
+}
