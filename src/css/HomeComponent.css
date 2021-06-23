@@ -1,0 +1,36 @@
+.home-background{
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+.home-container {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding: 100px;
+}
+.heading{
+  padding: 30px;
+}
+.subheading{
+  text-align: center;
+}
+
+.search-bar{
+  background-color: aliceblue;
+  border-radius: 3px;
+  width: 30rem;
+  height: 2rem;
+  margin-top: 10px;
+  color: #bbbbbb;
+  justify-content: center;
+  padding-left: 10px;
+  border:none;
+  font-size:1em;
+  font-weight:;
+}

@@ -1,0 +1,86 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*
+helper color classes
+*/
+.color-1{
+  background-color: #a31aff !important; /*purple*/
+}
+
+.text-color-1{
+  color: #a31aff !important; /*purple*/
+}
+
+.color-2{
+  background-color: #0addff !important; /*blue*/
+}
+
+.text-color-2{
+  color: #0addff !important; /*blue*/
+}
+
+.color-3{
+  background-color: #66ffcc !important; /*green*/
+}
+
+.text-color-3{
+  color: #66ffcc !important; /*green*/
+}
+
+.light-grey{
+  background-color: #e6e6e6 !important;
+}
+
+.changing-gradient-background{
+  background: linear-gradient(-75deg, #a31aff, #0addff, #66ffcc);
+	animation: gradient 15s ease infinite;
+	background-size: 300% 300%;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+/*
+helper text classes
+*/
+.heading{
+  font-family: 'Ubuntu', 'Roboto', sans-serif;
+  font-weight:  400;
+  font-size: 4rem;
+}
+
+.subheading{
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 3rem;
+}
+
+.text-large{
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 2.5rem;
+}
+
+.text-medium{
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 1.75rem;
+}
+
+.text-small{
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 1rem;
+}
