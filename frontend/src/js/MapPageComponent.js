@@ -12,16 +12,55 @@ function getMapMarkers(data){
   var markers = []
 
   for(let i = 0; i < data.length; i++){
-
-    let marker = <Marker key={i} position={data[i].latlng}>
-    </Marker>
-
-    markers.push(marker);
+    markers.push(
+      <Marker key={i} position={data[i].latlng}>
+      </Marker>
+    );
   }
 
   return markers;
 }
 
+/*
+given data describing organizations that take donations,
+create a set of Card components for each organization
+*/
+function getMapCards(data){
+  var cards = []
+
+  for(let i = 0; i < data.length; i++){
+    cards.push(
+      <CardComponent key={i} data={data[i]}/>
+    )
+  }
+
+  return cards;
+}
+
+/*
+card component for containing a single organization's data
+*/
+class CardComponent extends Component{
+  constructor(props){
+    super(props)
+  }
+
+  render(){
+    return(
+      <div>
+        <h2>{this.props.data.name}</h2>
+        <h3>{this.props.data.type}</h3>
+        <h3>{this.props.data.address}</h3>
+        <h3>{this.props.data.description}</h3>
+        <br/>
+      </div>
+    )
+  }
+}
+
+/*
+component representing the Map Page
+*/
 class MapPageComponent extends Component{
 
   constructor(props){
@@ -59,14 +98,31 @@ class MapPageComponent extends Component{
     if(this.state.isLoaded){
 
       var markers = getMapMarkers(this.state.items);
+      var cards = getMapCards(this.state.items);
 
       return (
         <div className="map-page">
           <div className="org-div">
             <div className="search-inputs">
-              <input className="map-page-searchbar" placeholder="Location..."></input>
+              <div className="searchbar-container">
+                <input id="map-page-searchbar" placeholder="Location..."></input>
+              </div>
+              <div className="search-dropdown-container">
+                <label for="cars">Choose a car:</label>
+
+                <select name="cars" id="cars">
+                  <option value="volvo">Volvo</option>
+                  <option value="saab">Saab</option>
+                  <option value="mercedes">Mercedes</option>
+                  <option value="audi">Audi</option>
+                </select>
+              </div>
+              <div className="search-button-container">
+                <button className="search-button"> > </button>
+              </div>
             </div>
             <div className="org-list-container">
+              {cards}
             </div>
           </div>
 
