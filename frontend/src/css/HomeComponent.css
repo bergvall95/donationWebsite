@@ -6,6 +6,7 @@
   left: 0;
   z-index: -1;
 }
+
 .home-container {
   color: white;
   display: flex;
@@ -14,9 +15,11 @@
   flex-direction: column;
   padding: 100px;
 }
+
 .heading{
   padding: 30px;
 }
+
 .subheading{
   text-align: center;
 }
