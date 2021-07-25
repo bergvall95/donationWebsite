@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
@@ -8,10 +8,10 @@ import '../css/MapPageComponent.css';
 given data describing organizations that take donations,
 create an array of Marker components for each organization
 */
-function getMapMarkers(data){
+function getMapMarkers(data) {
   var markers = []
 
-  for(let i = 0; i < data.length; i++){
+  for (let i = 0; i < data.length; i++) {
     markers.push(
       <Marker key={i} position={data[i].latlng}>
       </Marker>
@@ -25,12 +25,12 @@ function getMapMarkers(data){
 given data describing organizations that take donations,
 create a set of Card components for each organization
 */
-function getMapCards(data){
+function getMapCards(data) {
   var cards = []
 
-  for(let i = 0; i < data.length; i++){
+  for (let i = 0; i < data.length; i++) {
     cards.push(
-      <CardComponent key={i} data={data[i]}/>
+      <CardComponent key={i} data={data[i]} />
     )
   }
 
@@ -40,20 +40,26 @@ function getMapCards(data){
 /*
 card component for containing a single organization's data
 */
-class CardComponent extends Component{
-  constructor(props){
+class CardComponent extends Component {
+  constructor(props) {
     super(props)
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <div>
-        <h2>{this.props.data.name}</h2>
-        <h3>{this.props.data.type}</h3>
-        <h3>{this.props.data.address}</h3>
-        <h3>{this.props.data.description}</h3>
-        <br/>
+
+        <div className="search-card">
+          <div className="search-card-body">
+            <div className="search-card-title">{this.props.data.name}</div>
+            <div className="search-card-type">{this.props.data.type}</div>
+            <div className="search-card-desc"> {this.props.data.description}</div>
+          </div>
+        </div>
       </div>
+
+
+
     )
   }
 }
@@ -61,9 +67,9 @@ class CardComponent extends Component{
 /*
 component representing the Map Page
 */
-class MapPageComponent extends Component{
+class MapPageComponent extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props)
 
     //position defaults to austin texas is this.props.position has not been specified
@@ -79,23 +85,23 @@ class MapPageComponent extends Component{
   load locations near the passed in position prop,
   if no prop exists, default to austin or the user's current location
   */
-  componentDidMount(){
+  componentDidMount() {
     this.setState({
       isLoaded: true,
       items: [
-        {name: "Test1", type:"test", latlng:[30.26, -97.74], address:"Austin, TX", description:"this is a test"},
-        {name: "Test2", type:"test", latlng:[30.27, -97.8], address:"Austin, TX", description:"this is a test"},
-        {name: "Test3", type:"test", latlng:[30.25, -97.9], address:"Austin, TX", description:"this is a test"},
-        {name: "Test4", type:"test", latlng:[30.24, -97.85], address:"Austin, TX", description:"this is a test"},
-        {name: "Test5", type:"test", latlng:[30.25, -97.81], address:"Austin, TX", description:"this is a test"}
+        { name: "Test1", type: "test", latlng: [30.26, -97.74], address: "Austin, TX", description: "this is a test" },
+        { name: "Test2", type: "test", latlng: [30.27, -97.8], address: "Austin, TX", description: "this is a test" },
+        { name: "Test3", type: "test", latlng: [30.25, -97.9], address: "Austin, TX", description: "this is a test" },
+        { name: "Test4", type: "test", latlng: [30.24, -97.85], address: "Austin, TX", description: "this is a test" },
+        { name: "Test5", type: "test", latlng: [30.25, -97.81], address: "Austin, TX", description: "this is a test" }
       ]
     })
   }
 
-  render(){
+  render() {
 
     //if the data has loaded, return the map and list of organizations
-    if(this.state.isLoaded){
+    if (this.state.isLoaded) {
 
       var markers = getMapMarkers(this.state.items);
       var cards = getMapCards(this.state.items);
@@ -138,7 +144,7 @@ class MapPageComponent extends Component{
         </div>
       )
 
-    //if the data has not loaded, return a loading icon
+      //if the data has not loaded, return a loading icon
     } else {
       return (
         <div className="loading-icon-container">
