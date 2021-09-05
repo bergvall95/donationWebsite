@@ -11,15 +11,6 @@ class HomeComponent extends Component {
   }
 
   componentDidMount(){
-    fetch("http://localhost:3001/api").then(
-      (data)=>{
-        return data.json()
-      }
-    ).then(
-      (data)=>{
-        this.setState({"testApiMessage": data.message})
-      }
-    )
   }
 
   render() {

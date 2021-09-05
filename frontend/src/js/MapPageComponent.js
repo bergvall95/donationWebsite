@@ -4,27 +4,8 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 import '../css/MapPageComponent.css';
 
-// firebase and firestore configuration
-
-// Firebase App (the core Firebase SDK) is always required and must be listed first
-import firebase from "firebase/app";
-import "firebase/firestore";
-/*
-given data describing organizations that take donations,
-create an array of Marker components for each organization
-*/
-const firebaseConfig = {
-	apiKey: "AIzaSyDIOcp1QzYL4brFaErWQzON9PQhi-1iyu0",
-	authDomain: "donation-station-8204b.firebaseapp.com",
-	projectId: "donation-station-8204b",
-	storageBucket: "donation-station-8204b.appspot.com",
-	messagingSenderId: "438288415599",
-	appId: "1:438288415599:web:d8c568e9ad358516bbc69a",
-	measurementId: "G-Q7K1NMDGFW"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
+import db from './firebase.config.js';
+import { collection, getDocs } from "firebase/firestore";
 
 function getMapMarkers(data) {
 	var markers = []
@@ -53,6 +34,21 @@ function getMapCards(data) {
 	}
 
 	return cards;
+}
+
+/*
+tests whether datapoints have required fields
+*/
+function verify_document(doc){
+
+	let verified = true;
+
+	verified = verified && doc.latlng && Array.isArray(doc.latlng) && doc.latlng.length === 2;
+	verified = verified && doc.name && typeof(doc.name) === "string";
+	verified = verified && doc.type && typeof(doc.type) === "string";
+	verified = verified && doc.description && typeof(doc.description) === "string";
+
+	return verified;
 }
 
 /*
@@ -87,7 +83,7 @@ class MapPageComponent extends Component {
 
 	constructor(props) {
 		super(props)
-		this.donationCenters = [];
+
 		//position defaults to austin texas is this.props.position has not been specified
 		//TODO : change this to get browser location
 		this.state = {
@@ -103,21 +99,20 @@ class MapPageComponent extends Component {
 	*/
 	componentDidMount() {
 
-		db.collection("locations").get().then((items) => {
-			items.forEach((doc) => {
-				this.donationCenters.push(doc.data());
+		let my_items = []
+
+		db.collection("locations").get().then((querySnapshot) => {
+			querySnapshot.forEach(function(doc){
+				let data = doc.data();
+				if(verify_document(data))
+					my_items.push(doc.data())
 			})
-		})
-		console.log(this.donationCenters);
-		var items = this.donationCenters;
-		setTimeout(() => { console.log(this.state.items); }, 2000);
-		this.setState({
-			isLoaded: true,
-			items: items
-		})
-		
-		getMapCards(this.state.items);
-		getMapMarkers(this.state.items);
+
+			this.setState({
+				items: my_items,
+				isLoaded: true
+			})
+		});
 	}
 
 	render() {
@@ -136,7 +131,7 @@ class MapPageComponent extends Component {
 								<input id="map-page-searchbar" placeholder="Location..."></input>
 							</div>
 							<div className="search-dropdown-container">
-								<label for="cars">Choose a car:</label>
+								<label>Choose a car:</label>
 
 								<select name="cars" id="cars">
 									<option value="volvo">Volvo</option>
