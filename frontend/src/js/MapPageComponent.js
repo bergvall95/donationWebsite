@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 import '../css/MapPageComponent.css';
 
+import Geocoder from './Geocoder.js';
 import db from './firebase.config.js';
 import { collection, getDocs } from "firebase/firestore";
 
@@ -84,21 +85,23 @@ class MapPageComponent extends Component {
 	constructor(props) {
 		super(props)
 
-		//position defaults to austin texas is this.props.position has not been specified
-		//TODO : change this to get browser location
 		this.state = {
-			position: this.props.position ? this.props.position : [30.26, -97.74],
+			position: [],
 			isLoaded: false,
-			items: []
+			items: [],
+			searchInput: ''
 		}
+
+		this.geocoder = new Geocoder();
+		this.updateMapLocation = this.updateMapLocation.bind(this);
+		this.handleSearchChange = this.handleSearchChange.bind(this);
+		this.handleSearchButtonClick = this.handleSearchButtonClick.bind(this);
 	}
 
 	/*
-	load locations near the passed in position prop,
-	if no prop exists, default to austin or the user's current location
+	new_position : array of 2 numbers, [latitude, longitude]
 	*/
-	componentDidMount() {
-
+	updateMapLocation(new_position){
 		let my_items = []
 
 		db.collection("locations").get().then((querySnapshot) => {
@@ -109,10 +112,69 @@ class MapPageComponent extends Component {
 			})
 
 			this.setState({
+				position: new_position,
 				items: my_items,
 				isLoaded: true
 			})
 		});
+	}
+
+	handleSearchChange(e){
+    this.setState({
+      searchInput: e.target.value
+    })
+  }
+
+	handleSearchButtonClick(){
+
+		this.setState({'isLoaded': false});
+
+		//convert address to latitude longitude and route to the map page
+		this.geocoder.geocode(this.state.searchInput).then(
+			(response)=>{
+				this.updateMapLocation(response);
+			},
+			(err)=>{
+				console.log(err)
+			}
+		);
+	}
+
+	/*
+	load locations near the passed in position prop,
+	if no prop exists, default to austin or the user's current location
+	*/
+	componentDidMount() {
+
+		/*
+		if a user did not pass in a location, and does not have location tracking
+		enabled in their browser, default to Austin, TX
+		*/
+		var initial_position = [30.26, -97.74];
+
+		/*
+		this.props.location can be passed in when routing from another page
+		if it is available, use this as the map's initial location
+		*/
+		if(this.props.location.state){
+			initial_position = this.props.location.state;
+
+		/*
+		if the user has enabled location sharing, use their browser's location as
+		the map's initial location
+		*/
+		}else if ("geolocation" in navigator){
+			navigator.geolocation.getCurrentPosition(
+	      function(position) {
+					initial_position = [position.coords.latitude, position.coords.longitude];
+	      },
+	      function(error) {
+	        console.error("Error Code = " + error.code + " - " + error.message);
+	      }
+    	);
+		}
+
+		this.updateMapLocation(initial_position);
 	}
 
 	render() {
@@ -128,7 +190,11 @@ class MapPageComponent extends Component {
 					<div className="org-div">
 						<div className="search-inputs">
 							<div className="searchbar-container">
-								<input id="map-page-searchbar" placeholder="Location..."></input>
+								<input
+									id="map-page-searchbar"
+									placeholder="Location..."
+									onChange={ this.handleSearchChange }>
+								</input>
 							</div>
 							<div className="search-dropdown-container">
 								<label>Choose a car:</label>
@@ -141,7 +207,11 @@ class MapPageComponent extends Component {
 								</select>
 							</div>
 							<div className="search-button-container">
-								<button className="search-button"> > </button>
+								<button
+									className="search-button"
+									onClick={ this.handleSearchButtonClick }>
+									>
+								</button>
 							</div>
 						</div>
 						<div className="org-list-container">
